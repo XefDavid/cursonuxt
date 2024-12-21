@@ -1,10 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const route = useRoute();
+const {
+	public: { omdbApiKey },
+} = useRuntimeConfig();
+
+const { data } = useAsyncData(() => {
+	return $fetch(
+		`https://www.omdbapi.com/?apikey=${omdbApiKey}&i=${route.params.id}`
+	);
+});
+</script>
 
 <template>
 	<div>
-		<p>pagina con la id</p>
-		<h1>{{ $route.params.id }}</h1>
+		<h1>{{ data }}</h1>
 	</div>
+	<pre>{{ data }}</pre>
 </template>
 
 <style scoped></style>

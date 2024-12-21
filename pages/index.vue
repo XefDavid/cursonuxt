@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Searchmovies from "../components/Searchmovies.vue";
+</script>
 
 <template>
-	<div>Page: ahora estoy en index, pagina principal</div>
+	<Searchmovies />
 </template>
 
 <style scoped></style>

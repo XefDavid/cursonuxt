@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const query = ref("");
 const movies = ref([]);
-const apikey = "7401552a";
+
 const {
 	public: { omdbApiKey },
 } = useRuntimeConfig();
@@ -24,7 +24,6 @@ const search = async () => {
 		/>
 		<button class="bg-blue-300 rounded-xl w-20">Search</button>
 	</form>
-
 	<ul class="gap-20 justify-center grid grid-cols-3 p-12 w-[70%]">
 		<li
 			v-for="movie in movies"
@@ -45,8 +44,6 @@ const search = async () => {
 			</NuxtLink>
 		</li>
 	</ul>
-
-	<pre>{{ movies }}</pre>
 </template>
 
 <style scoped></style>
