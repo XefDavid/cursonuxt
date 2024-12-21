@@ -24,13 +24,28 @@ const search = async () => {
 		/>
 		<button class="bg-blue-300 rounded-xl w-20">Search</button>
 	</form>
-	<ul>
-		<li v-for="movie in movies" key="movie.imdbID">
+
+	<ul class="gap-20 justify-center grid grid-cols-3 p-12 w-[70%]">
+		<li
+			v-for="movie in movies"
+			key="movie.imdbID"
+			class="border border-black flex items-center justify-center w-[340px] h-[550px] bg-blue-50"
+		>
 			<NuxtLink :to="{ name: 'movies-id', params: { id: movie.imdbID } }">
-				<img :src="movie.Poster" alt="movie" />
+				<p
+					class="text-center text-normal text-gray-700 font-mono font-extrabold w-[250px] pb-10"
+				>
+					{{ movie.Title }}
+				</p>
+				<img
+					:src="movie.Poster"
+					alt="movie"
+					class="border border-black w-[250px] h-[400px]"
+				/>
 			</NuxtLink>
 		</li>
 	</ul>
+
 	<pre>{{ movies }}</pre>
 </template>
 
