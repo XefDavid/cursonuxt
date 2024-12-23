@@ -1,5 +1,7 @@
 <template>
 	<div class="flex justify-center items-center pt-24 flex-col gap-2">
-		<NuxtPage />
+		<NuxtLayout>
+			<NuxtPage />
+		</NuxtLayout>
 	</div>
 </template>
