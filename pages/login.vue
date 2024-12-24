@@ -1,28 +1,33 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import loginForm from "~/components/LoginForm.vue";
+
+// Definir las referencias
 const username = ref("");
 const email = ref("");
 
-const handleSubmit = () => {
-	console.log("Username:", username.value);
-	console.log("Email:", email.value);
-};
+// Definir el título de la página
+useHead({
+	title: "Login",
+});
+
+// Imprimir valores de las referencias al montarse el componente
+onMounted(() => {
+	console.log("Componente montado, valores iniciales:");
+	console.log("username:", username.value);
+	console.log("email:", email.value);
+});
+
+// Monitorear cambios en las referencias y loguearlos
+watch([username, email], () => {
+	console.log("Valores actualizados:");
+	console.log("username:", username.value);
+	console.log("email:", email.value);
+});
 </script>
 
 <template>
 	<div class="border border-blue-500 bg-red-200">
-		<form @submit.prevent="handleSubmit">
-			<h1>Login</h1>
-			<label for="username">Username</label>
-			<input
-				v-model="username"
-				type="text"
-				id="username"
-				name="username"
-				required
-			/>
-			<label for="email">Email</label>
-			<input v-model="email" type="email" id="email" name="email" required />
-			<button type="submit">Login</button>
-		</form>
+		<loginForm />
 	</div>
 </template>

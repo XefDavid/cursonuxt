@@ -1,28 +1,42 @@
 import bcrypt from "bcrypt";
+import { users } from "../users";
+import { useRouter } from "vue-router";
 
-const users = []; // Lista temporal de usuarios (debería ser reemplazada por una base de datos real)
+const router = useRouter();
 
 export default defineEventHandler(async (event) => {
-	// Lee los datos del cuerpo de la solicitud
-	const { name, email, password } = await readBody(event);
+	console.log("Usuarios existentes:", users); // Mostrar los usuarios existentes al momento de crear un nuevo usuario
 
-	// Verifica si ya existe un usuario con ese correo electrónico
-	if (users.find((user) => user.email === email)) {
+	const { name, email, password } = await readBody(event);
+	console.log("Datos recibidos del cuerpo de la solicitud:", {
+		name,
+		email,
+		password,
+	}); // Mostrar los datos recibidos en la solicitud
+
+	// Verificar si el usuario ya existe
+	const existingUser = users.find((user) => user.email === email);
+	console.log("Usuario encontrado con el email proporcionado:", existingUser); // Mostrar el usuario encontrado (si existe)
+
+	if (existingUser) {
+		console.log("El usuario ya existe con el email:", email); // Si el usuario ya existe, lo indicamos
 		throw createError({
 			statusCode: 400,
 			statusMessage: "User already exists",
 		});
 	}
 
-	// Genera un hash de la contraseña
+	// Si el usuario no existe, se procede a hashear la contraseña
+	console.log("Hasheando la contraseña...");
 	const hashedPassword = await bcrypt.hash(password, 10);
+	console.log("Contraseña hasheada:", hashedPassword); // Mostrar la contraseña hasheada (con cuidado en un entorno de producción)
 
-	// Crea un nuevo usuario
+	// Crear el nuevo usuario
 	const newUser = { name, email, password: hashedPassword };
+	console.log("Nuevo usuario creado:", newUser); // Mostrar el nuevo usuario antes de agregarlo
 
-	// Guarda el nuevo usuario en el arreglo temporal (en producción, esto iría en una base de datos)
+	// Agregar el nuevo usuario al array de usuarios
 	users.push(newUser);
 
-	// Devuelve una respuesta exitosa
 	return { message: "User created successfully" };
 });
