@@ -1,5 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import newUserForm from "~/components/newUserForm.vue";
+
+useHead({
+	title: "Create a new user",
+});
+</script>
 
 <template>
-	<h1>soy el formulario de incripcion</h1>
+	<div>
+		<newUserForm />
+	</div>
 </template>

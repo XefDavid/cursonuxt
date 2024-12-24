@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Searchmovies from "../components/Searchmovies.vue";
 import Welcome from "./welcome.vue";
 </script>
 

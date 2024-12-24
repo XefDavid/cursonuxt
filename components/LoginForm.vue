@@ -24,6 +24,7 @@ const handleSubmit = async () => {
 		successMessage.value = response.message;
 		console.log("Usuario logeado con éxito", successMessage.value);
 		router.push("/movies/searchMovies");
+		console.log("Redirigiendo a /movies/searchMovies");
 	} catch (error: any) {
 		errorMessage.value =
 			error.data?.statusMessage || "Ups..! Ocurrió un error inesperado...";
