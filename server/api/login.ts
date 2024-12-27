@@ -1,24 +1,28 @@
 import bcrypt from "bcrypt";
-import { users } from "../users"; // Suponiendo que `users` es un array con los usuarios
-import { useRouter } from "vue-router";
+import { PrismaClient } from "@prisma/client"; // Importa PrismaClient
 
-const router = useRouter();
+const prisma = new PrismaClient(); // Instancia de PrismaClient
 
 export default defineEventHandler(async (event) => {
-	// Imprimir el array de usuarios para verificar que está llegando correctamente
-	console.log("Usuarios disponibles:", users);
-
 	const body = await readBody(event);
-	// Imprimir el cuerpo de la solicitud para ver qué datos se están enviando
-	console.log("Cuerpo de la solicitud:", body);
 
-	// Buscar al usuario por email
-	const user = users.find((u) => u.email === body.email);
-	// Imprimir el usuario encontrado (o null si no se encontró)
-	console.log("Usuario encontrado:", user);
+	// Verificar que se envió un email y una contraseña
+	const { email, password } = body;
 
+	if (!email || !password) {
+		throw createError({
+			statusCode: 400,
+			statusMessage: "Email and password are required",
+		});
+	}
+
+	// Buscar al usuario por email en la base de datos
+	const user = await prisma.user.findUnique({
+		where: { email }, // Buscamos el usuario por su email
+	});
+
+	// Si no existe el usuario, lanzar error de credenciales inválidas
 	if (!user) {
-		console.log("Credenciales inválidas: el usuario no existe");
 		throw createError({
 			statusCode: 401,
 			statusMessage: "Invalid credentials. Please verify your information.",
@@ -26,23 +30,22 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Verificar que la contraseña proporcionada coincida con el hash almacenado
-	console.log("Verificando la contraseña proporcionada...");
-	const isPasswordValid = await bcrypt.compare(body.password, user.password);
-	// Imprimir el resultado de la comparación
-	console.log("Contraseña válida:", isPasswordValid);
+	const isPasswordValid = await bcrypt.compare(password, user.password);
 
+	// Si la contraseña no coincide, lanzar error de credenciales inválidas
 	if (!isPasswordValid) {
-		console.log("Credenciales inválidas: la contraseña no coincide");
 		throw createError({
 			statusCode: 401,
 			statusMessage: "Invalid credentials. Please verify your information.",
 		});
 	}
 
-	// Si la contraseña es válida, responder con éxito
+	// Si las credenciales son correctas, responder con un mensaje de éxito
 	console.log("Usuario autenticado con éxito");
+
+	// Aquí puedes generar un token de sesión o JWT si es necesario (no implementado aquí)
+
 	return {
-		success: true,
 		message: "User logged in successfully",
 	};
 });
