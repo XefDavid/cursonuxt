@@ -33,7 +33,7 @@ useHead({
 <template>
 	<div class="p-8">
 		<div class="p-3">
-			<nuxt-link to="/">
+			<nuxt-link to="/movies/searchMovies">
 				<button class="bg-blue-300 rounded-xl w-20 h-8 container">Back</button>
 			</nuxt-link>
 		</div>

@@ -34,24 +34,48 @@ const handleRegister = async () => {
 </script>
 
 <template>
-	<form @submit.prevent="handleRegister">
-		<label for="name">Name:</label>
-		<input v-model="name" id="name" type="text" required />
-
-		<label for="email">Email:</label>
-		<input v-model="email" id="email" type="email" required />
-
-		<label for="password">Password:</label>
-		<input v-model="password" id="password" type="password" required />
-
-		<label for="confirmPassword">Confirm Password:</label>
-		<input
-			v-model="confirmPassword"
-			id="confirmPassword"
-			type="password"
-			required
-		/>
-
-		<button type="submit">Register</button>
-	</form>
+	<div
+		class="border border-blue-500 bg-blue-200 font-mono text-sm text-center rounded-xl p-4"
+	>
+		<form
+			class="flex flex-col gap-2 items-center justify-center"
+			@submit.prevent="handleRegister"
+		>
+			<label for="name">Name:</label>
+			<input
+				v-model="name"
+				id="name"
+				type="text"
+				required
+				class="text-center border border-black rounded-xl w-60 text-sm h-8"
+			/>
+			<label for="email">Email:</label>
+			<input
+				v-model="email"
+				id="email"
+				type="email"
+				required
+				class="text-center border border-black rounded-xl w-60 text-sm h-8"
+			/>
+			<label for="password">Password:</label>
+			<input
+				v-model="password"
+				id="password"
+				type="password"
+				required
+				class="text-center border border-black rounded-xl w-60 text-sm h-8"
+			/>
+			<label for="confirmPassword">Confirm Password:</label>
+			<input
+				v-model="confirmPassword"
+				id="confirmPassword"
+				type="password"
+				required
+				class="text-center border border-black rounded-xl w-60 text-sm h-8"
+			/>
+			<button type="submit" class="bg-blue-300 rounded-xl w-20 p-1">
+				Register
+			</button>
+		</form>
+	</div>
 </template>

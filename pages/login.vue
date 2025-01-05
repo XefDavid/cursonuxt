@@ -27,7 +27,7 @@ watch([username, email], () => {
 </script>
 
 <template>
-	<div class="border border-blue-500 bg-red-200">
+	<div class="border border-blue-500">
 		<loginForm />
 	</div>
 </template>
