@@ -31,7 +31,16 @@ useHead({
 				class="border border-black rounded-xl w-60 text-sm text-center h-8"
 				placeholder="Search your favorite films"
 			/>
-			<button class="bg-blue-300 rounded-xl w-20">Search</button>
+			<button
+				class="rounded-xl w-20"
+				:class="{
+					'bg-gray-300': !query,
+					'bg-blue-400': query,
+					'border border-blue-500': query,
+				}"
+			>
+				Search
+			</button>
 		</form>
 		<ul class="gap-20 justify-center grid grid-cols-3 p-12 w-[70%]">
 			<li

@@ -10,12 +10,12 @@ const confirmPassword = ref("");
 
 const handleRegister = async () => {
 	try {
-		// Verificar que las contraseñas coincidan
+		// Check if passwords match
 		if (password.value !== confirmPassword.value) {
-			throw new Error("Las contraseñas no coinciden.");
+			throw new Error("Passwords do not match.");
 		}
 
-		// Enviar los datos al backend
+		// Send data to the backend
 		const response = await $fetch("/api/register", {
 			method: "POST",
 			body: {
@@ -25,10 +25,21 @@ const handleRegister = async () => {
 			},
 		});
 
-		console.log("Respuesta del servidor:", response);
-		router.push("/login");
-	} catch (error) {
-		console.error("Error al registrar el usuario:", error);
+		console.log("Server response:", response);
+
+		// Show success message and redirect
+		alert("User registered successfully.");
+		router.push("/");
+	} catch (error: any) {
+		if (error?.data?.statusCode === 400) {
+			// Handle error if the user is already registered
+			alert("User already exists. Redirecting to the home page.");
+			router.push("/");
+		} else {
+			// Handle other errors
+			console.error("Error during user registration:", error);
+			alert("An error occurred during registration.Try again.");
+		}
 	}
 };
 </script>
@@ -73,7 +84,15 @@ const handleRegister = async () => {
 				required
 				class="text-center border border-black rounded-xl w-60 text-sm h-8"
 			/>
-			<button type="submit" class="bg-blue-300 rounded-xl w-20 p-1">
+			<button
+				type="submit"
+				class="rounded-xl w-20 p-1"
+				:class="{
+					'bg-blue-400': name && email && password && confirmPassword,
+					'border border-blue-500':
+						name && email && password && confirmPassword,
+				}"
+			>
 				Register
 			</button>
 		</form>
