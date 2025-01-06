@@ -43,8 +43,6 @@ export default defineEventHandler(async (event) => {
 	// Si las credenciales son correctas, responder con un mensaje de éxito
 	console.log("Usuario autenticado con éxito");
 
-	// Aquí puedes generar un token de sesión o JWT si es necesario (no implementado aquí)
-
 	return {
 		message: "User logged in successfully",
 	};
