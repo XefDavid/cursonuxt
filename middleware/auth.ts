@@ -1,6 +1,11 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-	const userIsLoggedIn = false;
-	if (!userIsLoggedIn) {
-		return navigateTo({ path: "/login" });
+	if (process.client) {
+		// Verifica si el token existe
+		const token = localStorage.getItem("auth_token");
+
+		if (!token) {
+			// Redirige al login si no está autenticado
+			return navigateTo("/");
+		}
 	}
 });

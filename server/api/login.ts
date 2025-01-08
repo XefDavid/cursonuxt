@@ -1,6 +1,10 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"; // Asegúrate de instalar esta dependencia
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
+const SECRET_KEY = process.env.JWT_SECRET || "secret_key_for_jwt"; // Llave secreta para firmar el token
+
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
 
@@ -13,6 +17,7 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// Busca al usuario en la base de datos
 	const user = await prisma.user.findUnique({
 		where: { email },
 	});
@@ -24,8 +29,8 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// Verifica la contraseña
 	const isPasswordValid = await bcrypt.compare(password, user.password);
-
 	if (!isPasswordValid) {
 		throw createError({
 			statusCode: 401,
@@ -33,7 +38,14 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
+	// Genera el token JWT
+	const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
+		expiresIn: "1h", // Configura el tiempo de expiración
+	});
+
+	console.log("Token generado:", token); // Añade este log para ver el token generado
 	return {
 		message: "User logged in successfully",
+		token, // Devuelve el token generado
 	};
 });

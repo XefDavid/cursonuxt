@@ -9,18 +9,17 @@ const errorMessage = ref("");
 const successMessage = ref("");
 
 const handleSubmit = async () => {
-	console.log("Enviando datos al backend...");
-
 	try {
 		// Limpiar los mensajes previos
 		errorMessage.value = "";
 		successMessage.value = "";
 
 		// Mostrar los valores que se van a enviar
+		console.log("Enviando datos al backend...");
 		console.log("Email enviado:", email.value);
 		console.log("Contraseña enviada:", password.value);
 
-		// Enviar email y password al backend
+		// Llamada al backend
 		const response = await $fetch("/api/login", {
 			method: "POST",
 			body: {
@@ -29,16 +28,27 @@ const handleSubmit = async () => {
 			},
 		});
 
-		// Si el login es exitoso, mostrar mensaje y redirigir
-		successMessage.value = response.message;
-		console.log("Usuario logeado con éxito:", successMessage.value);
+		console.log("Respuesta del backend:", response); // Log para ver la respuesta completa
 
-		// Redirigir al usuario
-		router.push("/movies/searchMovies");
-		console.log("Redirigiendo a /movies/searchMovies");
+		// Verifica que el token esté presente en la respuesta
+		if (response.token) {
+			console.log("Token recibido:", response.token); // Log para mostrar el token recibido
+			console.log("Mensaje recibido:", response); // Log para mostrar el mensaje recibido
+
+			// Guarda el token en localStorage
+			localStorage.setItem("auth_token", response.token);
+			console.log("Token guardado en localStorage:", response.token);
+
+			// Muestra el mensaje de éxito
+			successMessage.value = response.message;
+
+			// Redirige a la página /main
+			router.push("/main"); // Cambia aquí la ruta de redirección
+		} else {
+			console.error("No se recibió el token.");
+		}
 	} catch (error: any) {
-		// Mostrar el error devuelto por el backend
-		console.error("Error durante el login:", error); // Log para el error completo
+		// Manejo de errores
 		errorMessage.value =
 			error.data?.statusMessage || "Ups..! Ocurrió un error inesperado...";
 	}
