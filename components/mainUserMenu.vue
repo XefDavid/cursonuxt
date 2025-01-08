@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import Navbar from "./navbar.vue";
 
 const router = useRouter();
 
 // Definir un ref para almacenar los datos del usuario
-const user = ref<{
+const user = reactive<{
 	name: string | null;
 	email: string | null;
 	id: string | null;
@@ -61,11 +61,11 @@ onMounted(async () => {
 				console.log("Estructura de los datos:", userData.body);
 
 				// Asignar los datos a user.value
-				user.value.name = userData.body.name;
-				user.value.email = userData.body.email;
-				user.value.id = userData.body.id;
+				user.name = userData.body.name;
+				user.email = userData.body.email;
+				user.id = userData.body.id;
 
-				console.log("Datos del usuario asignados:", user.value);
+				console.log("Datos del usuario asignados:", user);
 			} else {
 				console.error(
 					"La respuesta no contiene los datos del usuario esperados"
@@ -92,7 +92,7 @@ const handleLogout = () => {
 		<Navbar />
 		<!-- Mostrar el nombre del usuario si existe -->
 		{{ console.log(user) }}
-		<h1 v-if="user.value?.name">¡Bienvenido {{ user.value.name }}!</h1>
+		<h1 v-if="user.name">¡Bienvenido {{ user.name }}!</h1>
 
 		<p v-else>Cargando datos del usuario...</p>
 
