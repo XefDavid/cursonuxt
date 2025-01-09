@@ -10,12 +10,12 @@ const confirmPassword = ref("");
 
 const handleRegister = async () => {
 	try {
-		// Check if passwords match
+		// Verifica si las contraseñas coinciden
 		if (password.value !== confirmPassword.value) {
 			throw new Error("Passwords do not match.");
 		}
 
-		// Send data to the backend
+		// Envía los datos al backend
 		const response = await $fetch("/api/register", {
 			method: "POST",
 			body: {
@@ -25,20 +25,34 @@ const handleRegister = async () => {
 			},
 		});
 
-		console.log("Server response:", response);
+		console.log("Response from server:", response); // Depuración
 
-		// Show success message and redirect
-		alert("User registered successfully.");
-		router.push("/");
+		// Procesa la respuesta del backend
+		if (response?.message?.includes("User created successfully")) {
+			alert("User registered successfully.");
+
+			// Si hubo un problema enviando el correo, informa al usuario
+			if (response?.emailError) {
+				alert(
+					"Registration completed, but we could not send the confirmation email."
+				);
+			}
+
+			// Redirige al usuario después de un registro exitoso
+			router.push("/");
+		} else {
+			// Manejo de respuestas inesperadas
+			throw new Error("Unexpected response from server.");
+		}
 	} catch (error: any) {
+		// Manejo del caso de usuario ya existente
 		if (error?.data?.statusCode === 400) {
-			// Handle error if the user is already registered
 			alert("User already exists. Redirecting to the home page.");
 			router.push("/");
 		} else {
-			// Handle other errors
+			// Manejo de otros errores
 			console.error("Error during user registration:", error);
-			alert("An error occurred during registration.Try again.");
+			router.push("/");
 		}
 	}
 };

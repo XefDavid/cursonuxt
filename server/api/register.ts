@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
 	const { name, email, password } = await readBody(event);
 
+	console.log("Recibiendo datos del usuario:", { name, email });
+	console.log("Verificando si el usuario existe...");
+
 	const existingUser = await prisma.user.findUnique({
 		where: { email },
 	});
@@ -17,6 +20,7 @@ export default defineEventHandler(async (event) => {
 			statusMessage: "User already exists",
 		});
 	}
+	console.log("Creando nuevo usuario...");
 
 	const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -43,13 +47,11 @@ export default defineEventHandler(async (event) => {
 	} catch (error) {
 		console.error("Error enviando correo:", error);
 
-		// Envía una respuesta detallada al frontend para depuración
-		throw createError({
-			statusCode: 500,
-			statusMessage: "Error enviando correo",
-			data: error, // Agrega el detalle del error
-		});
+		// Envía un mensaje al frontend, pero no interrumpe el flujo
+		return {
+			message: "User created successfully, but email sending failed.",
+			user: newUser,
+			emailError: error.message,
+		};
 	}
-
-	return { message: "User created successfully", user: newUser };
 });

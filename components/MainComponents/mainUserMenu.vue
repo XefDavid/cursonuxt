@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
-import Navbar from "~/components/MainComponents/navbar.vue";
+import Navbar from "~/components/navbar.vue";
 import UserMenu from "~/components/MainComponents/UserMenu.vue";
 
 const router = useRouter();
