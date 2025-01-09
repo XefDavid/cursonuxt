@@ -68,11 +68,11 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div
-		class="flex justify-start items-center p-7 opacity-90 text-blue-900 font-mono"
-	>
-		<div class="bg-blue-200 p-8 w-[30%] h-[650px] rounded-xl font-bold text-lg">
-			<h1 v-if="user.name">¡Welcome back {{ user.name }}!</h1>
+	<div class="p-8 font-mono text-blue-900">
+		<div class="bg-blue-200 p-8 w-[30%] rounded-xl text-lg opacity-90">
+			<h1 v-if="user.name">
+				¡Welcome back <strong>{{ user.name }}!</strong>
+			</h1>
 			<p v-else>Cargando datos del usuario...</p>
 		</div>
 	</div>

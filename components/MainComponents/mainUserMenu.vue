@@ -3,6 +3,7 @@ import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
 import Navbar from "~/components/navbar.vue";
 import UserMenu from "~/components/MainComponents/UserMenu.vue";
+import SearchMovies from "~/pages/movies/searchMovies.vue";
 
 const router = useRouter();
 
@@ -70,14 +71,14 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div>
+	<div class="">
 		<div
 			id="imageBackground"
-			class="h-screen w-screen bg-cover bg-center border-[5px] border-blue-500 gap-5"
+			class="h-[100vh] w-screen bg-cover bg-center border-[5px] border-blue-500 gap-5"
 			:style="{ backgroundImage: `url('/images/background.webp')` }"
 		>
 			<Navbar />
-			<UserMenu />
+			<UserMenu />>
 		</div>
 	</div>
 </template>
