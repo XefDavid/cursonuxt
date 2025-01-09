@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import mainUserMenu from "~/components/mainUserMenu.vue";
+import mainUserMenu from "~/components/MainComponents/mainUserMenu.vue";
 
 definePageMeta({
 	middleware: "auth",
