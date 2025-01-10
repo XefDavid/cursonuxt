@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import newsMain from "~/components/news/newsMain.vue";
+import Navbar from "~/components/navbar.vue";
+import newsMain from "~/components/news/newsSearch.vue";
 </script>
 
 <template>
 	<div>
+		<Navbar />
 		<newsMain />
 	</div>
 </template>
