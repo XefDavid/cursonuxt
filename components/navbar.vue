@@ -67,6 +67,7 @@ const handleLogout = () => {
 			<nuxt-link to="/movies/searchMovies" class="p-3 hover:underline">
 				Search Info
 			</nuxt-link>
+			<nuxt-link to="/news/news" class="p-3 hover:underline"> News </nuxt-link>
 		</div>
 	</div>
 </template>

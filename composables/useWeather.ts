@@ -1,4 +1,3 @@
-// ~/composables/useWeather.ts
 import { ref } from "vue";
 
 export const useWeather = () => {

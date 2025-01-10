@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-	host: "smtp.gmail.com", // Servidor SMTP
-	port: 465, // Puerto para SSL
-	secure: true, // Usar SSL
+	host: "smtp.gmail.com",
+	port: 465,
+	secure: true,
 	auth: {
-		user: "moviesworldandmuchmore@gmail.com", // Reemplaza con tu email
-		pass: "sbtesxcjhatdpfxn",
+		user: "moviesworldandmuchmore@gmail.com",
+		pass: import.meta.env.VITE_EMAIL_NODEMAILER_APP,
 	},
 });
 
