@@ -68,6 +68,9 @@ const handleLogout = () => {
 				Search Info
 			</nuxt-link>
 			<nuxt-link to="/news/news" class="p-3 hover:underline"> News </nuxt-link>
+			<nuxt-link to="/streaming/streaming" class="p-3 hover:underline">
+				In Streming
+			</nuxt-link>
 		</div>
 	</div>
 </template>
