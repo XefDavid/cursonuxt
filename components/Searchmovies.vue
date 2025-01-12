@@ -19,11 +19,14 @@ useHead({
 </script>
 
 <template>
-	<div class="flex flex-col items-center justify-center pt-20">
-		<h1 class="text-3xl font-bold font-mono underline pb-7">
-			Search information aboutyour favorite films
+	<div
+		class="flex flex-col items-center justify-start pt-10 h-[100vh] overflow-auto"
+	>
+		<h1
+			class="text-5xl font-bold font-mono text-stroke-yellow w-full p-8 text-center"
+		>
+			Find Your Favorite Movies
 		</h1>
-		<img class="w-40 h-40 border border-blue-500" :src="logo" alt="Logo" />
 		<form class="flex flex-row gap-2 rounded-xl pt-7" @submit.prevent="search">
 			<input
 				type="text"
@@ -46,7 +49,7 @@ useHead({
 			<li
 				v-for="movie in movies"
 				key="movie.imdbID"
-				class="border border-black flex items-center justify-center w-[340px] h-[550px] bg-blue-50"
+				class="border border-black flex items-center justify-center w-[340px] h-[550px] bg-blue-100"
 			>
 				<NuxtLink :to="{ name: 'movies-id', params: { id: movie.imdbID } }">
 					<p
@@ -65,4 +68,9 @@ useHead({
 	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.text-stroke-yellow {
+	-webkit-text-stroke: 1px #e4c05f;
+	-webkit-text-fill-color: #1e3a8a;
+}
+</style>
