@@ -32,6 +32,7 @@ export const useWatchmode = () => {
 					},
 				}
 			);
+			console.log("Proveedores obtenidos:", response);
 			return response || [];
 		} catch (error) {
 			console.error("Error getting providers:", error);

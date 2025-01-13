@@ -71,6 +71,9 @@ const handleLogout = () => {
 			<nuxt-link to="/streaming/streaming" class="p-3 hover:underline">
 				In Streming
 			</nuxt-link>
+			<nuxt-link to="/billboard/mainbillboard" class="p-3 hover:underline">
+				Billboard
+			</nuxt-link>
 		</div>
 	</div>
 </template>

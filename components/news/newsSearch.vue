@@ -14,7 +14,9 @@ const onSearch = async () => {
 };
 </script>
 <template>
-	<div class="news-search flex flex-col items-center justify-center font-mono">
+	<div
+		class="flex flex-col items-center justify-start pt-10 h-[100vh] overflow-auto"
+	>
 		<h1
 			class="text-5xl font-bold font-mono text-stroke-yellow w-full p-8 text-center"
 		>
