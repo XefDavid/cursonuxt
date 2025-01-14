@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useWatchmode } from "@/composables/useWatchmode";
+import { ref } from "vue";
 
 const { getProviders } = useWatchmode();
 const query = ref("");
@@ -10,7 +10,7 @@ interface Movie {
 	Year: string;
 	Poster: string;
 	providers: {
-		name: keyof typeof platformLogos;
+		name: string; // Cambiado a `string` para flexibilidad
 		logo_url?: string;
 		web_url?: string;
 		source_id: string;
@@ -22,20 +22,29 @@ const loading = ref(false);
 const error = ref(null);
 
 const platformLogos = {
-	Netflix:
-		"https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
-	"Disney+":
-		"https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg",
+	Netflix: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+	"Disney+": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg",
 	Amazon: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png",
 	HBO: "https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg",
 	Hulu: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg",
-	"Rakuten TV":
-		"https://upload.wikimedia.org/wikipedia/commons/1/16/Rakuten_TV_logo.svg",
-	"Apple TV":
-		"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_TV_logo.svg",
-	Movistar:
-		"https://upload.wikimedia.org/wikipedia/commons/c/c4/Movistar%2B_logo.svg",
+	"Rakuten TV": "https://upload.wikimedia.org/wikipedia/commons/1/16/Rakuten_TV_logo.svg",
+	AppleTV: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Apple_TV.svg/512px-Apple_TV.svg.png?20230121010754",
+	"Movistar+ ": "https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_Movistar_%282%29.svg",
 	FILMIN: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Filmin_logo.svg",
+};
+
+// Buscar un logo dinámicamente (sin necesidad de mapeos manuales)
+const getLogoForProvider = (name: string): string => {
+	const normalizedKeys = Object.keys(platformLogos).map((key) => key.toLowerCase());
+	const index = normalizedKeys.indexOf(name.toLowerCase());
+
+	if (index !== -1) {
+		const matchedKey = Object.keys(platformLogos)[index];
+		return platformLogos[matchedKey];
+	}
+
+	// Fallback para proveedores desconocidos
+	return "https://via.placeholder.com/30";
 };
 
 const {
@@ -62,7 +71,7 @@ const handleSearch = async () => {
 		const enrichedMovies = await Promise.all(
 			Search.map(async (movie) => {
 				const providers: {
-					name: keyof typeof platformLogos;
+					name: string;
 					logo_url?: string;
 					web_url?: string;
 					source_id: string;
@@ -72,11 +81,9 @@ const handleSearch = async () => {
 					...movie,
 					providers: Array.isArray(providers)
 						? providers.map((provider) => ({
-								...provider,
-								logo_url:
-									platformLogos[provider.name] ||
-									"https://via.placeholder.com/30",
-						  }))
+							...provider,
+							logo_url: getLogoForProvider(provider.name), // Llamar a la función para cada proveedor
+						}))
 						: [],
 				};
 			})
@@ -92,33 +99,20 @@ const handleSearch = async () => {
 };
 </script>
 
+
 <template>
-	<div
-		class="flex flex-col items-center justify-start pt-10 h-[100vh] overflow-auto font-mono"
-	>
-		<h1
-			class="text-5xl font-bold font-mono text-stroke-yellow w-full p-8 text-center"
-		>
+	<div class="flex flex-col items-center justify-start pt-10 h-[100vh] overflow-auto font-mono">
+		<h1 class="text-5xl font-bold font-mono text-stroke-yellow w-full p-8 text-center">
 			Watch Your Favorite Movies
 		</h1>
-		<form
-			class="flex flex-row gap-2 rounded-xl pt-7"
-			@submit.prevent="handleSearch"
-		>
-			<input
-				type="text"
-				v-model="query"
-				class="border border-black rounded-xl w-60 text-sm text-center h-8"
-				placeholder="Search your favorite films"
-			/>
-			<button
-				class="rounded-xl w-20"
-				:class="{
-					'bg-gray-300': !query,
-					'bg-blue-400': query,
-					'border border-blue-500': query,
-				}"
-			>
+		<form class="flex flex-row gap-2 rounded-xl pt-7" @submit.prevent="handleSearch">
+			<input type="text" v-model="query" class="border border-black rounded-xl w-60 text-sm text-center h-8"
+				placeholder="Search your favorite films" />
+			<button class="rounded-xl w-20" :class="{
+				'bg-gray-300': !query,
+				'bg-blue-400': query,
+				'border border-blue-500': query,
+			}">
 				Search
 			</button>
 		</form>
@@ -127,19 +121,11 @@ const handleSearch = async () => {
 		<div v-if="error" class="text-center text-red-500">{{ error }}</div>
 
 		<ul class="justify-center flex flex-col gap-4 w-[70%] pt-10">
-			<li
-				v-for="movie in movies"
-				:key="movie.imdbID"
-				class="border border-black flex flex-col items-center justify-start size-25 bg-blue-100 rounded-xl"
-			>
-				<img
-					:src="movie.Poster || 'https://via.placeholder.com/300x400'"
-					alt="Poster"
-					class="w-[100px] h-[100px] mb-2 rounded-md"
-				/>
-				<p
-					class="text-center text-normal text-gray-700 font-mono font-extrabold w-[250px] pb-4"
-				>
+			<li v-for="movie in movies" :key="movie.imdbID"
+				class="border border-black flex flex-col items-center justify-start size-25 bg-blue-100 rounded-xl">
+				<img :src="movie.Poster || 'https://via.placeholder.com/300x400'" alt="Poster"
+					class="w-[100px] h-[100px] mb-2 rounded-md" />
+				<p class="text-center text-normal text-gray-700 font-mono font-extrabold w-[250px] pb-4">
 					{{ movie.Title }} ({{ movie.Year }})
 				</p>
 
@@ -148,23 +134,13 @@ const handleSearch = async () => {
 						Streaming Providers
 					</h2>
 					<ul>
-						<li
-							v-for="provider in movie.providers"
-							:key="provider.source_id"
-							class="flex items-center gap-2 mb-2"
-						>
-							<img
-								:src="provider.logo_url"
-								alt="Logo de la plataforma"
-								class="w-8 h-8"
-							/>
-							<a
-								v-if="provider.logo_url"
-								:href="provider.web_url"
-								target="_blank"
-								class="text-blue-500 underline"
-								>{{ provider.name }}</a
-							>
+						<li v-for="provider in movie.providers" :key="provider.source_id"
+							class="flex items-center gap-2 mb-2">
+							<img :src="provider.logo_url" alt="Logo de la plataforma" class="w-8 h-8" />
+							<a v-if="provider.web_url" :href="provider.web_url" target="_blank"
+								class="text-blue-500 underline">
+								{{ provider.name }}
+							</a>
 						</li>
 					</ul>
 				</div>
