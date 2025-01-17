@@ -12,12 +12,14 @@
   "dependencies": {
     "@prisma/client": "^6.1.0",
     "@vueuse/core": "^12.3.0",
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "cookie": "^1.0.2",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.14.1592",
     "sqlite3": "^5.1.7",
+    "tailwindcss-text-stroke": "^0.0.5",
     "vue": "latest",
     "vue-router": "latest"
   },
