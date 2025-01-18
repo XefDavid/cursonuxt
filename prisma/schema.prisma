@@ -9,8 +9,36 @@ generator client {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
+  id             Int         @id @default(autoincrement())
+  name           String
+  email          String      @unique
+  password       String
+  description    String?
+  profilePic     String?
+  posts          Post[]
+  favoriteMovies UserMovie[]
 }
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
+
+model Movie {
+  id    Int         @id @default(autoincrement())
+  title String      @unique
+  users UserMovie[]
+}
+
+model UserMovie {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  movie   Movie @relation(fields: [movieId], references: [id])
+  movieId Int
+
+  @@unique([userId, movieId]) 

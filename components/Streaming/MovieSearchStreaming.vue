@@ -27,10 +27,10 @@ const platformLogos = {
 	Amazon: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png",
 	HBO: "https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg",
 	Hulu: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg",
-	"Rakuten TV": "https://upload.wikimedia.org/wikipedia/commons/1/16/Rakuten_TV_logo.svg",
+	Rakuten: "https://corp.rakuten.co.jp/about/assets/img/company/logo_tv_01.svg",
 	AppleTV: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Apple_TV.svg/512px-Apple_TV.svg.png?20230121010754",
 	"Movistar+ ": "https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_Movistar_%282%29.svg",
-	FILMIN: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Filmin_logo.svg",
+	FILMIN: "https://getlogo.net/wp-content/uploads/2021/01/filmin-logo-vector.svg",
 };
 
 // Buscar un logo dinámicamente (sin necesidad de mapeos manuales)
@@ -146,6 +146,7 @@ const handleSearch = async () => {
 				</div>
 			</li>
 		</ul>
+		<pre>{{ movies.value }}</pre>
 	</div>
 </template>
 
