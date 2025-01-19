@@ -33,12 +33,10 @@ model Movie {
   title String      @unique
   users UserMovie[]
 }
-
 model UserMovie {
   id      Int   @id @default(autoincrement())
-  user    User  @relation(fields: [userId], references: [id])
   userId  Int
-  movie   Movie @relation(fields: [movieId], references: [id])
   movieId Int
-
-  @@unique([userId, movieId]) 
+  user    User  @relation(fields: [userId], references: [id])
+  movie   Movie @relation(fields: [movieId], references: [id])
+}
