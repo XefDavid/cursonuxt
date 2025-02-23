@@ -20,6 +20,18 @@ const user = reactive<{
 	favoriteMovies: [],
 });
 
+const post = reactive<{
+	title: string | null;
+	content: string | null;
+	createdAT: string | null;
+	user: string | null;
+}>({
+	title: null,
+	content: null,
+	createdAT: null,
+	user: null,
+});
+
 onMounted(async () => {
 	if (typeof window !== "undefined") {
 		const token = localStorage.getItem("auth_token");
@@ -71,8 +83,8 @@ const editProfile = () => {
 </script>
 
 <template>
-	<div class="p-8 font-mono text-blue-900">
-		<div class="bg-blue-200 p-8 w-[30%] rounded-xl text-lg opacity-90 h-full mx-auto">
+	<div class="p-5 font-mono text-blue-900 justify-start items-start">
+		<div class="bg-blue-200 p-8 w-[30%] rounded-xl text-lg opacity-90 h-full">
 			<!-- Título de bienvenida -->
 			<h1 v-if="user.name" class="text-center text-2xl font-bold">
 				¡Welcome back <strong>{{ user.name }}</strong>!
@@ -98,10 +110,7 @@ const editProfile = () => {
 				<p v-else>No hay películas favoritas.</p>
 			</div>
 
-			<!-- Mostrar email -->
-			<div v-show="user.email !== null" class="mt-4 text-center">
-				<p><strong>Email:</strong> {{ user.email || 'No se ha proporcionado un email' }}</p>
-			</div>
+
 
 			<!-- Botón para editar -->
 			<div class="mt-6 text-center">
@@ -109,6 +118,17 @@ const editProfile = () => {
 					Editar Perfil
 				</button>
 			</div>
+		</div>
+		<!-- Mostrar email -->
+		<div v-show="user.email !== null" class="mt-4 text-center">
+			<p><strong>Email:</strong> {{ user.email || 'No se ha proporcionado un email' }}</p>
+		</div>
+		<div class="mt-4 text-center">
+			<p v-if="post.title"><strong>Título:</strong> {{ post.title }}</p>
+			<p v-else>No se ha proporcionado un título</p>
+
+			<p v-if="post.content"><strong>Contenido:</strong> {{ post.content }}</p>
+			<p v-else>No se ha proporcionado contenido</p>
 		</div>
 	</div>
 </template>
