@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-
+import navbar from "~/components/navbar.vue";
 // Usamos ref para manejar los datos del formulario
 const name = ref<string | null>(null);
 const email = ref<string | null>(null);
@@ -97,7 +97,10 @@ const removeFavoriteMovie = (index: number) => {
 </script>
 
 <template>
-    <div class="p-8 font-mono text-blue-900">
+    <div class="flex flex-col p-8 font-mono text-blue-900 bg-slate-900 gap-4">
+
+        <navbar />
+
         <div class="bg-blue-200 p-8 w-[30%] rounded-xl text-lg opacity-90 mx-auto">
             <h2 class="text-2xl font-bold text-center">Editar Perfil</h2>
 
