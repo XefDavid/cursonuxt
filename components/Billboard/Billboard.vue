@@ -33,7 +33,7 @@ export default {
 								<p v-if="movie.release_dates.length"
 									class="text-center text-gray-700 font-mono font-bold w-[250px] flex flex-row">
 									Fecha de estreno:
-								<p class="text-base pl-3">{{ movie.release_dates[0]?.release_date }}</p>
+									<span class="text-base pl-3">{{ movie.release_dates[0]?.release_date }}</span>
 								</p>
 								<p v-if="movie.synopsis_long"
 									class="text-start text-normal text-gray-700 font-mono  w-full">
