@@ -120,29 +120,34 @@ const handleSearch = async () => {
 		<div v-if="loading" class="text-center text-gray-500">Cargando...</div>
 		<div v-if="error" class="text-center text-red-500">{{ error }}</div>
 
-		<ul class="justify-center flex flex-col gap-4 w-[70%] pt-10">
+		<ul class="gap-20 justify-center flex flex-col w-[50%] pt-5">
 			<li v-for="movie in movies" :key="movie.imdbID"
-				class="border border-black flex flex-col items-center justify-start size-25 bg-blue-100 rounded-xl">
-				<img :src="movie.Poster || 'https://via.placeholder.com/300x400'" alt="Poster"
-					class="w-[100px] h-[100px] mb-2 rounded-md" />
-				<p class="text-center text-normal text-gray-700 font-mono font-extrabold w-[250px] pb-4">
-					{{ movie.Title }} ({{ movie.Year }})
-				</p>
+				class="border border-black flex flex-row w-full  bg-blue-100">
 
-				<div class="flex flex-col items-start gap-2">
-					<h2 class="text-gray-800 font-semibold text-lg">
-						Streaming Providers
-					</h2>
-					<ul>
-						<li v-for="provider in movie.providers" :key="provider.source_id"
-							class="flex items-center gap-2 mb-2">
-							<img :src="provider.logo_url" alt="Logo de la plataforma" class="w-8 h-8" />
-							<a v-if="provider.web_url" :href="provider.web_url" target="_blank"
-								class="text-blue-500 underline">
-								{{ provider.name }}
-							</a>
-						</li>
-					</ul>
+				<div class="flex flex-row  justify-startitems-start p-2 gap-2">
+
+					<img :src="movie.Poster || 'https://via.placeholder.com/300x400'" alt="Poster"
+						class="border border-black w-[250px] h-[400px] p-2 mt-5" />
+
+					<div class="flex flex-col justify-cecnter items-center gap-2">
+						<p class="text-center text-xl text-gray-700 font-mono font-extrabold w-full underline p-4">
+							{{ movie.Title }} ({{ movie.Year }})
+						</p>
+						<h2 class="text-gray-800 text-lg">
+							Streaming Providers:
+						</h2>
+						<ul>
+							<li v-for="provider in movie.providers" :key="provider.source_id"
+								class="flex items-center gap-2 mb-2">
+								<img :src="provider.logo_url" alt="Logo de la plataforma" class="w-8 h-8" />
+								<a v-if="provider.web_url" :href="provider.web_url" target="_blank"
+									class="text-blue-500 underline">
+									{{ provider.name }}
+								</a>
+
+							</li>
+						</ul>
+					</div>
 				</div>
 			</li>
 		</ul>

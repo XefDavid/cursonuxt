@@ -32,7 +32,7 @@ export default {
 							<div class="flex flex-col  justify-start items-start p-2 gap-2">
 								<p v-if="movie.release_dates.length"
 									class="text-center text-gray-700 font-mono font-bold w-[250px] flex flex-row">
-									Fecha de estreno:
+									Release date:
 									<span class="text-base pl-3">{{ movie.release_dates[0]?.release_date }}</span>
 								</p>
 								<p v-if="movie.synopsis_long"
