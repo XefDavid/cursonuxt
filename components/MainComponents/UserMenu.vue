@@ -60,7 +60,7 @@ onMounted(async () => {
 				user.name = userData.name;
 				user.email = userData.email;
 				user.id = userData.id;
-				user.profilePic = userData.profilePic || null;
+				user.profilePic = userData.profilePic || "/images/defaultProfilePic.svg";
 				user.bio = userData.description || '';  // Cambié 'description' por 'bio' (opcional)
 				user.favoriteMovies = userData.favoriteMovies || [];
 
