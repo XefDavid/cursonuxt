@@ -60,7 +60,7 @@ onMounted(async () => {
 				user.name = userData.name;
 				user.email = userData.email;
 				user.id = userData.id;
-				user.profilePic = userData.profilePic || "/images/defaultProfilePic.svg";
+				user.profilePic = userData.profilePic || "/images/defaultProfilePic.jpg";
 				user.bio = userData.description || '';  // Cambié 'description' por 'bio' (opcional)
 				user.favoriteMovies = userData.favoriteMovies || [];
 
@@ -93,7 +93,7 @@ const editProfile = () => {
 
 			<!-- Mostrar foto de perfil -->
 			<div v-if="user.profilePic" class="mt-4 flex justify-center">
-				<img :src="user.profilePic" alt="Foto de perfil" class="w-24 h-24 rounded-full" />
+				<img :src="user.profilePic" alt="Foto de perfil" class="w-24 h-24 rounded-xl" />
 			</div>
 
 			<!-- Mostrar bio -->
