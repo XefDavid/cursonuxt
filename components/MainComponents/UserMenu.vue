@@ -93,7 +93,8 @@ const editProfile = () => {
 
 			<!-- Mostrar foto de perfil -->
 			<div v-if="user.profilePic" class="mt-4 flex justify-center">
-				<img :src="user.profilePic" alt="Foto de perfil" class="w-24 h-24 rounded-xl" />
+				<img :src="user.profilePic || '/images/defaultProfilePic.jpg'" alt="Foto de perfil"
+					class="w-24 h-24 rounded-xl" />
 			</div>
 
 			<!-- Mostrar bio -->

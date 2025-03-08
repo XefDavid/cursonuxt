@@ -1,6 +1,6 @@
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; // Asegúrate de instalar esta dependencia
-import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET || "secret_key_for_jwt"; // Llave secreta para firmar el token
