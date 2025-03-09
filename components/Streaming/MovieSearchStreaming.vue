@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { useWatchmode } from "@/composables/useWatchmode";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+onMounted(() => {
+	const token = localStorage.getItem("auth_token");
 
+	if (!token) {
+		console.log("🔒 No estás autenticado. Redirigiendo al login...");
+		router.push("/"); // Redirige al login si no hay token
+	}
+});
 const { getProviders } = useWatchmode();
 const query = ref("");
 interface Movie {
@@ -32,6 +39,14 @@ const platformLogos = {
 	"Movistar+ ": "https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_Movistar_%282%29.svg",
 	FILMIN: "https://getlogo.net/wp-content/uploads/2021/01/filmin-logo-vector.svg",
 };
+onMounted(() => {
+	const token = localStorage.getItem("auth_token");
+
+	if (!token) {
+		console.log("🔒 No estás autenticado. Redirigiendo al login...");
+		router.push("/"); // Redirige al login si no hay token
+	}
+});
 
 // Buscar un logo dinámicamente (sin necesidad de mapeos manuales)
 const getLogoForProvider = (name: string): string => {

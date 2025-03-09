@@ -1,6 +1,20 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import useNewsApi from "~/composables/useNewsApi";
+
+// ⚡ Instancia del router
+const router = useRouter();
+
+// 🔐 Verifica si el usuario está autenticado
+onMounted(() => {
+	const token = localStorage.getItem("auth_token");
+
+	if (!token) {
+		console.log("🔒 No estás autenticado. Redirigiendo al login...");
+		router.push("/"); // Redirige al login si no hay token
+	}
+});
 
 // Variable reactiva para el idioma
 const language = ref("");
@@ -13,6 +27,7 @@ const onSearch = async () => {
 	await fetchCinemaNews(language.value, "defaultSecondArgument");
 };
 </script>
+
 <template>
 	<div class="flex flex-col items-center justify-start pt-10 h-[100vh] overflow-auto">
 		<h1 class="text-5xl font-bold font-mono text-stroke-yellow w-full p-8 text-center">
@@ -22,7 +37,7 @@ const onSearch = async () => {
 			<div class="mb-4">
 				<select v-model="language" id="language"
 					class="border border-black rounded-xl w-60 text-sm text-center h-8">
-					<option value="" disabled selected>chose a language</option>
+					<option value="" disabled selected>Choose a language</option>
 					<option value="en">Inglés</option>
 					<option value="es">Español</option>
 					<option value="fr">Francés</option>
@@ -60,6 +75,7 @@ const onSearch = async () => {
 		</div>
 	</div>
 </template>
+
 <style scoped>
 .text-stroke-yellow {
 	-webkit-text-stroke: 1px #e4c05f;

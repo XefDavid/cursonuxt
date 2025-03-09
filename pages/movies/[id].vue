@@ -1,5 +1,33 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter();
+
+const userId = ref(null);
+
+onMounted(async () => {
+	const token = localStorage.getItem("auth_token");
+
+	if (!token) {
+		console.log("🔒 No estás autenticado. Redirigiendo al login...");
+		router.push("/");
+		return;
+	}
+
+	try {
+		const response = await fetch("/api/user", {
+			method: "GET",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		const userData = await response.json();
+		console.log("Usuario obtenido:", userData);
+		userId.value = userData.id; // Guardamos el ID
+	} catch (error) {
+		console.error("Error al obtener usuario:", error);
+		router.push("/");
+	}
+});
 
 const route = useRoute();
 const {
@@ -52,25 +80,39 @@ const isFavorite = ref(false);
 // Función para alternar estado y mostrar alerta
 console.log("Movie data:", data);
 const toggleFavorite = async () => {
-	if (!data.value?.Title) {
-		alert("Error: Movie title is missing!");
+	if (!userId.value) {
+		alert("Error: No se pudo obtener el ID del usuario.");
 		return;
 	}
 
-	console.log("Sending title:", data.value.Title);
+	console.log("Usuario autenticado, ID:", userId.value);
 
-	const response = await fetch("/api/addFavorite", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			userId: 35, // ⚠️ Aquí debes usar el ID real del usuario autenticado
-			title: data.value.Title, // ✅ Ahora estamos seguros de que `Title` existe
-		}),
-	});
+	try {
+		const response = await fetch("/api/addFavorite", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				userId: userId.value, // ✅ Ahora tenemos el ID correcto
+				title: data.value.Title,
+			}),
+		});
 
-	const result = await response.json();
-	console.log("Response from server:", result);
+		const result = await response.json();
+		console.log("Respuesta del servidor:", result);
+
+		if (response.ok) {
+			isFavorite.value = true;
+			alert("Película agregada a favoritos.");
+		} else {
+			alert("Error al agregar favorito.");
+		}
+	} catch (error) {
+		console.error("Error en toggleFavorite:", error);
+		alert("Hubo un error al procesar tu solicitud.");
+	}
 };
+
+
 
 
 
