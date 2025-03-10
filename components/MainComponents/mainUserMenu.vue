@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import { onMounted, reactive } from "vue";
-import Navbar from "~/components/navbar.vue";
+import { useRouter } from "vue-router";
 import UserMenu from "~/components/MainComponents/UserMenu.vue";
-import SearchMovies from "~/pages/movies/searchMovies.vue";
+import Navbar from "~/components/navbar.vue";
 
 const router = useRouter();
 
@@ -72,11 +71,7 @@ onMounted(async () => {
 
 <template>
 	<div class="">
-		<div
-			id="imageBackground"
-			class="h-[100vh] w-screen bg-cover bg-center border-[5px] border-blue-500 gap-5"
-			:style="{ backgroundImage: `url('/images/background.webp')` }"
-		>
+		<div>
 			<Navbar />
 			<UserMenu />>
 		</div>
