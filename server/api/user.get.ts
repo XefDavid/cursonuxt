@@ -5,24 +5,21 @@ const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET || "secret_key_for_jwt";
 
 export default defineEventHandler(async (event) => {
-  console.log("Iniciando `user.get` handler");
-
-  const token = getHeader(event, "authorization")?.split(" ")[1];
-  console.log("Token recibido:", token);
-
-  if (!token) {
-    console.error("Error: No token provided");
-    throw createError({
-      statusCode: 401,
-      statusMessage: "No token provided",
-    });
-  }
-
   try {
-    const decodedToken: any = jwt.verify(token, SECRET_KEY);
-    const userId = decodedToken.id;
-    console.log("Token decodificado, userId:", userId);
+    const authHeader = getRequestHeader(event, "authorization");
+    if (!authHeader) {
+      throw createError({ statusCode: 401, statusMessage: "No token provided" });
+    }
 
+    const token = authHeader.split(" ")[1];
+    const decodedToken = jwt.verify(token, SECRET_KEY) as { id: number };
+    const userId = decodedToken.id;
+
+    if (!userId) {
+      throw createError({ statusCode: 400, statusMessage: "Invalid token" });
+    }
+
+    // Obtener datos del usuario autenticado
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -32,14 +29,8 @@ export default defineEventHandler(async (event) => {
     });
 
     if (!user) {
-      console.error("Error: User not found");
-      throw createError({
-        statusCode: 404,
-        statusMessage: "User not found",
-      });
+      throw createError({ statusCode: 404, statusMessage: "User not found" });
     }
-
-    console.log("Usuario encontrado:", user);
 
     return {
       id: user.id,
@@ -52,9 +43,6 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     console.error("Error al obtener el usuario:", error.message);
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Internal server error",
-    });
+    throw createError({ statusCode: 500, statusMessage: "Internal server error" });
   }
 });
