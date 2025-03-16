@@ -52,6 +52,7 @@ const handleLogout = () => {
 		</div>
 		<div class="flex flex-row justify-between bg-blue-200 h-10 px-2 items-center text-sm opacity-90">
 			<nuxt-link to="/main" class="p-3 hover:underline"> Home </nuxt-link>
+			<nuxt-link to="/post/post" class="p-3 hover:underline"> Post </nuxt-link>
 			<nuxt-link to="/movies/searchMovies" class="p-3 hover:underline">
 				Search Info
 			</nuxt-link>
