@@ -13,6 +13,10 @@ const user = reactive({
 const postList = ref([]);
 const newPost = reactive({ title: "", content: "" });
 
+// Estado para comentarios
+const comments = ref<{ [key: number]: any[] }>({});
+const newComment = reactive({ content: "", postId: null });
+
 onMounted(async () => {
 	const token = localStorage.getItem("auth_token");
 
@@ -49,6 +53,11 @@ const fetchPosts = async () => {
 	try {
 		const response = await fetch("/api/posts");
 		postList.value = await response.json();
+
+		// Obtener comentarios de cada post
+		for (const post of postList.value) {
+			await fetchComments(post.id);
+		}
 	} catch (error) {
 		console.error("Error cargando posts:", error);
 	}
@@ -83,6 +92,41 @@ const createPost = async () => {
 	}
 };
 
+// Obtener comentarios de un post
+const fetchComments = async (postId: number) => {
+	try {
+		const response = await fetch(`/api/comments?postId=${postId}`);
+		comments.value[postId] = await response.json();
+	} catch (error) {
+		console.error("Error cargando comentarios:", error);
+	}
+};
+
+// Crear un nuevo comentario
+const createComment = async (postId: number) => {
+	const token = localStorage.getItem("auth_token");
+
+	if (!token) {
+		alert("Debes iniciar sesión");
+		return;
+	}
+
+	try {
+		await fetch("/api/comments", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ content: newComment.content, postId }),
+		});
+
+		newComment.content = "";
+		await fetchComments(postId);
+	} catch (error) {
+		console.error("Error creando comentario:", error);
+	}
+};
 </script>
 
 <template>
@@ -121,6 +165,22 @@ const createPost = async () => {
 				<h3 class="font-bold">{{ p.title }}</h3>
 				<p>{{ p.content }}</p>
 				<small>Publicado por: {{ p.user.name }}</small>
+
+				<!-- Sección de comentarios -->
+				<div class="mt-3">
+					<h4 class="font-bold">Comentarios</h4>
+
+					<ul>
+						<li v-for="comment in comments[p.id]" :key="comment.id">
+							<strong>{{ comment.user.name }}:</strong> {{ comment.content }}
+						</li>
+					</ul>
+
+					<input v-model="newComment.content" placeholder="Escribe un comentario..."
+						class="w-full p-2 border mt-2" />
+					<button @click="createComment(p.id)"
+						class="bg-blue-500 text-white p-2 rounded mt-2">Comentar</button>
+				</div>
 			</div>
 		</div>
 	</div>
