@@ -3,10 +3,15 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const email = ref(""); // Usaremos email
-const password = ref(""); // Nueva variable para la contraseña
+const email = ref("");
+const password = ref("");
 const errorMessage = ref("");
 const successMessage = ref("");
+
+const sanitizeInput = (input: string) => {
+	// Elimina etiquetas HTML y caracteres potencialmente peligrosos
+	return input.replace(/<[^>]*>?/g, "").trim();
+};
 
 const handleSubmit = async () => {
 	try {
@@ -14,41 +19,39 @@ const handleSubmit = async () => {
 		errorMessage.value = "";
 		successMessage.value = "";
 
+		// Sanitizar los valores
+		const sanitizedEmail = sanitizeInput(email.value);
+		const sanitizedPassword = sanitizeInput(password.value);
+
+		// Validaciones adicionales
+		if (sanitizedEmail.length > 50 || sanitizedPassword.length > 20) {
+			errorMessage.value = "Los datos ingresados exceden el límite permitido.";
+			return;
+		}
+
 		// Mostrar los valores que se van a enviar
 		console.log("Enviando datos al backend...");
-		console.log("Email enviado:", email.value);
-		console.log("Contraseña enviada:", password.value);
+		console.log("Email enviado:", sanitizedEmail);
+		console.log("Contraseña enviada:", "*".repeat(sanitizedPassword.length));
 
 		// Llamada al backend
 		const response = await $fetch("/api/login", {
 			method: "POST",
 			body: {
-				email: email.value,
-				password: password.value,
+				email: sanitizedEmail,
+				password: sanitizedPassword,
 			},
 		});
 
-		console.log("Respuesta del backend:", response); // Log para ver la respuesta completa
-
-		// Verifica que el token esté presente en la respuesta
 		if (response.token) {
-			console.log("Token recibido:", response.token); // Log para mostrar el token recibido
-			console.log("Mensaje recibido:", response); // Log para mostrar el mensaje recibido
-
-			// Guarda el token en localStorage
 			localStorage.setItem("auth_token", response.token);
-			console.log("Token guardado en localStorage:", response.token);
-
-			// Muestra el mensaje de éxito
 			successMessage.value = response.message;
-
-			// Redirige a la página /main
-			router.push("/main"); // Cambia aquí la ruta de redirección
+			router.push("/main");
 		} else {
 			console.error("No se recibió el token.");
+			errorMessage.value = "Error de autenticación.";
 		}
 	} catch (error: any) {
-		// Manejo de errores
 		errorMessage.value =
 			error.data?.statusMessage || "Ups..! Ocurrió un error inesperado...";
 	}
@@ -56,34 +59,17 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-	<div
-		class="border border-blue-500 bg-blue-200 font-mono text-sm text-center rounded-xl p-4"
-	>
-		<form
-			@submit.prevent="handleSubmit"
-			class="flex flex-col gap-2 items-center justify-center"
-		>
+	<div class="border border-blue-500 bg-blue-200 font-mono text-sm text-center rounded-xl p-4">
+		<form @submit.prevent="handleSubmit" class="flex flex-col gap-2 items-center justify-center">
 			<!-- Email -->
 			<label for="email">Email</label>
-			<input
-				v-model="email"
-				type="email"
-				id="email"
-				name="email"
-				required
-				class="text-center border border-black rounded-xl w-60 text-sm h-8"
-			/>
+			<input v-model="email" type="email" id="email" name="email" required maxlength="50"
+				class="text-center border border-black rounded-xl w-60 text-sm h-8" />
 
 			<!-- Contraseña -->
 			<label for="password">Password</label>
-			<input
-				v-model="password"
-				type="password"
-				id="password"
-				name="password"
-				required
-				class="text-center border border-black rounded-xl w-60 text-sm h-8"
-			/>
+			<input v-model="password" type="password" id="password" name="password" required maxlength="20"
+				class="text-center border border-black rounded-xl w-60 text-sm h-8" />
 
 			<!-- Botón de login -->
 			<button type="submit" class="bg-blue-300 rounded-xl w-20 p-1">
