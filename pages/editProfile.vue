@@ -136,51 +136,59 @@ const removeFavoriteMovie = (index: number) => {
 </script>
 
 <template>
-    <div class="flex flex-col p-8 font-mono text-blue-900 bg-slate-900 gap-4">
-        <div class="bg-blue-200 p-8 w-[30%] rounded-xl text-lg opacity-90 mx-auto">
-            <h2 class="text-2xl font-bold text-center">Editar Perfil</h2>
+    <div id="imageBackground" class="aspect-[16/9] w-screen bg-cover bg-center border-[5px] border-blue-500 gap-5"
+        :style="{ backgroundImage: `url('/images/background.webp')` }">
+        <Navbar />
+        <div class="flex flex-col p-8 font-mono text-blue-900  gap-4">
+            <div class="bg-blue-200 p-8 w-[30%] rounded-xl text-lg opacity-90 mx-auto">
+                <h2 class="text-2xl font-bold text-center">Editar Perfil</h2>
 
-            <form @submit.prevent="updateProfile">
-                <div class="mt-4">
-                    <label for="name">Nombre:</label>
-                    <input type="text" id="name" v-model="name" maxlength="50" class="w-full p-2 mt-1 border rounded" />
-                </div>
-
-                <div class="mt-4">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" v-model="email" class="w-full p-2 mt-1 border rounded" readonly />
-                </div>
-
-                <div class="mt-4">
-                    <label for="bio">Bio:</label>
-                    <textarea id="bio" v-model="bio" maxlength="300" class="w-full p-2 mt-1 border rounded"></textarea>
-                </div>
-
-                <div class="mt-4">
-                    <label for="profilePic">Imagen de Perfil:</label>
-                    <input type="file" id="profilePic" @change="handleFileChange" accept="image/*"
-                        class="w-full p-2 mt-1 border rounded" />
-                </div>
-
-                <div class="mt-4">
-                    <label>Películas Favoritas:</label>
-                    <div v-for="(movie, index) in favoriteMovies" :key="index" class="mt-2">
-                        <input v-model="favoriteMovies[index]" maxlength="100" class="w-full p-2 mt-1 border rounded" />
-                        <button type="button" @click="removeFavoriteMovie(index)"
-                            class="text-red-500 mt-1">Eliminar</button>
+                <form @submit.prevent="updateProfile">
+                    <div class="mt-4">
+                        <label for="name">Nombre:</label>
+                        <input type="text" id="name" v-model="name" maxlength="50"
+                            class="w-full p-2 mt-1 border rounded" />
                     </div>
-                    <button type="button" @click="addFavoriteMovie" class="text-blue-500 mt-2">Agregar otra
-                        película</button>
-                </div>
 
-                <p v-if="errorMessage" class="text-red-700 mt-2">{{ errorMessage }}</p>
+                    <div class="mt-4">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" v-model="email" class="w-full p-2 mt-1 border rounded"
+                            readonly />
+                    </div>
 
-                <div class="mt-6 text-center">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-                        Guardar Cambios
-                    </button>
-                </div>
-            </form>
+                    <div class="mt-4">
+                        <label for="bio">Bio:</label>
+                        <textarea id="bio" v-model="bio" maxlength="300"
+                            class="w-full p-2 mt-1 border rounded"></textarea>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="profilePic">Imagen de Perfil:</label>
+                        <input type="file" id="profilePic" @change="handleFileChange" accept="image/*"
+                            class="w-full p-2 mt-1 border rounded" />
+                    </div>
+
+                    <div class="mt-4">
+                        <label>Películas Favoritas:</label>
+                        <div v-for="(movie, index) in favoriteMovies" :key="index" class="mt-2">
+                            <input v-model="favoriteMovies[index]" maxlength="100"
+                                class="w-full p-2 mt-1 border rounded" />
+                            <button type="button" @click="removeFavoriteMovie(index)"
+                                class="text-red-500 mt-1">Eliminar</button>
+                        </div>
+                        <button type="button" @click="addFavoriteMovie" class="text-blue-500 mt-2">Agregar otra
+                            película</button>
+                    </div>
+
+                    <p v-if="errorMessage" class="text-red-700 mt-2">{{ errorMessage }}</p>
+
+                    <div class="mt-6 text-center">
+                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>
