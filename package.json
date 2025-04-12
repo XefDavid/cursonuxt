@@ -25,6 +25,7 @@
     "nuxt": "^3.14.1592",
     "sqlite3": "^5.1.7",
     "tailwindcss-text-stroke": "^0.0.5",
+    "tar-fs": "^3.0.8",
     "vue": "latest",
     "vue-router": "latest"
   },

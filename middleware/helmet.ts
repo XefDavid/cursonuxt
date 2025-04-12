@@ -1,28 +1,45 @@
 import helmet from "helmet";
 import { defineNitroPlugin } from "nitropack";
 
-export default defineNitroPlugin((nitroApp) => {
-  nitroApp.hooks.hook("request", (event) => {
-    // En desarrollo, relajar las políticas
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    
-    helmet({
-      contentSecurityPolicy: isDevelopment ? false : {
+const isDevelopment = process.env.NODE_ENV === "development";
+
+// 👮 Configuración de Helmet
+const helmetMiddleware = helmet({
+  contentSecurityPolicy: isDevelopment
+    ? false
+    : {
         directives: {
-          defaultSrc: ["'self'", "localhost"],
-          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "localhost"],
-          styleSrc: ["'self'", "localhost"],
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          styleSrc: ["'self'"],
           objectSrc: ["'none'"],
         },
       },
-      hsts: isDevelopment ? { maxAge: 0 } : {
+  hsts: isDevelopment
+    ? { maxAge: 0 }
+    : {
         maxAge: 31536000, // 1 año
         includeSubDomains: true,
-        preload: true
+        preload: true,
       },
-      xssFilter: true,
-      xContentTypeOptions: true,
-      frameguard: { action: 'DENY' },
-    })(event.node.req, event.node.res, () => {});
+  xssFilter: true,
+  xContentTypeOptions: true,
+  frameguard: { action: "DENY" },
+  referrerPolicy: { policy: "no-referrer" },
+  dnsPrefetchControl: { allow: false },
+  permittedCrossDomainPolicies: { permittedPolicies: "none" },
+});
+
+export default defineNitroPlugin((nitroApp) => {
+  nitroApp.hooks.hook("request", (event) => {
+    const req = event.node.req;
+
+    // 🧼 Limpieza de cabeceras para evitar ataques de cache poisoning
+    delete req.headers["x-forwarded-host"];
+    delete req.headers["x-original-url"];
+    delete req.headers["host"]; 
+
+    // 🛡️ Aplica Helmet
+    helmetMiddleware(req, event.node.res, () => {});
   });
 });
